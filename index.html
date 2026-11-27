@@ -90,8 +90,8 @@ body {
 	z-index: 1;
 }
 		</style>
-		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.166d926.png" />
-<link rel="apple-touch-icon" href="index.apple-touch-icon.166d926.png"/>
+		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.8f21f45.png" />
+<link rel="apple-touch-icon" href="index.apple-touch-icon.8f21f45.png"/>
 <!-- 웹 내보내기의 html/head_include. .github/workflows/web-deploy.yml이 읽어서 Web 설정에 넣는다. -->
 <style>
 /* 페이지가 넘치거나 확대되지 않게 고정한다. 아이폰 Safari는 회전 중 캔버스가 화면보다 크면 페이지를 확대해 비율이 틀어진다. */
@@ -141,12 +141,14 @@ html, body {
 html.portrait-ok #rotate-hint { display: none; }
 </style>
 <script>
-// 새 버전 확인: 이 페이지의 버전(current. 배포 때 커밋 번호로 바뀜)과 build.txt의 최신 버전이 다르면
+// 배포 HTML과 게임 데이터에 같은 커밋 번호를 넣는다. 로컬 내보내기에는 빌드 번호가 없다.
+const stampedBuildId = "8f21f45";
+const webBuildId = stampedBuildId.startsWith("__") ? "" : stampedBuildId;
+// 새 버전 확인: 이 페이지의 빌드와 build.txt의 최신 버전이 다르면
 // 캐시된 예전 페이지이므로 ?v=최신버전 주소로 다시 연다(다른 주소라 캐시를 쓰지 않음). 같은 버전 주소면 다시 열지 않아 반복되지 않는다.
 (function () {
-	var current = "166d926";
-	if (current.indexOf("__") === 0) {
-		return;  // 배포가 아닌 로컬 내보내기
+	if (!webBuildId) {
+		return;
 	}
 	try {
 		var req = new XMLHttpRequest();
@@ -154,7 +156,7 @@ html.portrait-ok #rotate-hint { display: none; }
 		req.send();
 		var latest = req.status === 200 ? req.responseText.trim() : "";
 		var url = new URL(location.href);
-		if (latest && latest !== current && url.searchParams.get("v") !== latest) {
+		if (latest && latest !== webBuildId && url.searchParams.get("v") !== latest) {
 			url.searchParams.set("v", latest);
 			location.replace(url.toString());
 		}
@@ -170,6 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 // 게임(GDScript)이 JavaScriptBridge.get_interface("EarthToMarsWeb")로 부르는 웹 전용 기능.
 window.EarthToMarsWeb = {
+	buildId: webBuildId,
 	// 세로 화면 허용 여부(true면 "가로로 돌려 주세요" 안내를 숨긴다).
 	setPortraitAllowed: function (on) {
 		document.documentElement.classList.toggle("portrait-ok", !!on);
@@ -237,7 +240,7 @@ window.addEventListener("resize", function () {
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"mainPack":"index.166d926.pck","fileSizes":{"index.166d926.pck":4292848,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"mainPack":"index.8f21f45.pck","fileSizes":{"index.8f21f45.pck":4293616,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
